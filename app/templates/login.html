@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" href="/static/login.css">
+<div id="main">
+
+
+  <div class="centered login">
+    <div class="infologin">
+      <h1>Marion</h1>
+      <p>Avant de démarrer notre conversation, vous devez savoir que celle-ci sera archivée à des fins d’apprentissage par le chatbot <span class="mname">Marion</span>. Il ne s’agit pas pour autant de collecter vos données personnelles - nous vous
+        invitons donc à utiliser un pseudonyme et à ne pas confier d’informations personnelles à <span class="mname">Marion</span>.
+        En conversant avec le chatbot <span class="mname">Marion</span>, vous acceptez donc que celle-ci archive vos conversations.
+        Aucune conversation stockée sur nos serveurs ne sera utilisée à d’autres fins que ce projet.</p>
+    </div>
+    <div class="secondaryinfo">
+      <p>Vous pouvez converser avec <span class="mname">Marion</span> sans compte utilisateur.</p>
+
+      <p>Vous pouvez aussi créer un compte afin de poursuivre, au fil des jours, la conversation entamée avec <span class="mname">Marion</span>.</p>
+
+      <p>Si vous ne parvenez plus à envoyer de messages, rafraîchissez la page !</p>
+      <br>
+      <p>
+        <a href="#" id="signinbutton" class="btn">Connexion</a>
+      </p>
+
+      <form id="signinform" action="" method="post" name="login">
+        {{ form.hidden_tag() }}
+        <p>
+          Nom d’utilisateur:<br>
+          {{ form.username(size=80) }}<br>
+        </p>
+        <p>
+          Mot de passe:<br>
+          <input id="password" name="password" required="" size="80" type="password" value=""><br>
+        </p>
+        <p><input class="btn submit" type="submit" value="Connexion"></p>
+        <br>
+      </form>
+
+      <p>
+        <a href="/register" class="btn">Créer un compte</a>
+      </p>
+      <p>
+        <a href="/guest" class="btn">Converser avec <span class="mname">Marion</span> sans créer de compte</a>
+      </p>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

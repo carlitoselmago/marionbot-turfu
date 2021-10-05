@@ -1,0 +1,15 @@
+{% for msg in messages %}
+<div id="mi_{{ msg.id }}" class="message contmsg{% if msg.from|string() == session.user.id|string() %} me{% endif %}" date="{{msg.date|string}}">
+  <div class="bubble">
+    <p>{% if 'guest' not in msg.name|string() %}<b class="name">{{ msg.name }}</b>{% endif %}
+      {% if msg.tipo|int() ==0 %}
+      <span class="text">{{ msg.text }}</span>
+      {% endif %}
+      {% if msg.tipo|int() ==1 %}
+      <div class="image"><img draggable="false" src="static/images/{{ msg.text }}" alt="image"/></div>
+      {% endif %}
+      {% if msg.date %}<span class="msg-date">{{ msg.date|strftime}}
+      </span>{% endif %}
+    </p>
+  </div>
+</div>{% endfor %}

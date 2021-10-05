@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" href="/static/admin.css">
+<div class="adminview">
+  <h1>Add User</h1>
+</div>
+<div class="adminview">
+  <form action="" method="post" name="adduser">
+    {{ form.hidden_tag() }}
+    <p>
+      Username:<br>
+      {{ form.username(size=80) }}<br>
+    </p>
+    <p>
+      Password:<br>
+      {{ form.password(size=80) }}<br>
+    </p>
+    <p><input type="submit" value="adduser"></p>
+  </form>
+</div>
+
+{% endblock %}

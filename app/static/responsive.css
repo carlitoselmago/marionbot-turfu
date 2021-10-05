@@ -1,0 +1,11 @@
+@media (max-width: 768px) {
+  .centered {
+    padding: 0px 20px !important;
+  }
+
+  #main {
+    top: 0px;
+    transform: none;
+    padding: 40px 0px;
+  }
+}

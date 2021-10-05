@@ -1,3 +1,9 @@
+app/settings.py
+data/*
+transfchatbot/saved/*
+*.sh
+transfchatbot/tokenizer.pickle
+app/static/images/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

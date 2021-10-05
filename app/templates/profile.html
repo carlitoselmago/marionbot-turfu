@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" href="/static/admin.css">
+<div class="adminview">
+  <h1>Profile</h1>
+</div>
+
+<div class="adminview">
+  <form action="" method="post" name="profile">
+    {{ form.hidden_tag() }}
+    <p>
+      Username: {{ g.user.username }}
+    </p>
+    <p>
+      Please enter your new password:<br>
+      {{ form.password(size=80) }}<br>
+    </p>
+    <p><input type="submit" value="Change Password"></p>
+  </form>
+</div>
+{% endblock %}

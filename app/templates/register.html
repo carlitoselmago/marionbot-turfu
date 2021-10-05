@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" href="/static/admin.css">
+
+<div id="main">
+
+
+  <div class="centered login">
+
+    <h1>Créer un compte</h1>
+<br>
+
+    <form action="" method="post" name="adduser">
+      {{ form.hidden_tag() }}
+      <p>
+        Nom d’utilisateur:<br>
+        {{ form.username(size=80) }}<br>
+      </p>
+      <p>
+        Mot de passe:<br>
+      <input id="password" name="password" required="" size="80" type="password" value=""><br>
+      </p>
+      <p><input class="btn submit" type="submit" value="Connexion"></p>
+    </form>
+  </div>
+
+</div>
+{% endblock %}

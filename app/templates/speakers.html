@@ -1,0 +1,3 @@
+{% for spk in speakers %}
+  <a class="speaker {% if activespeaker|string() == spk.id|string() %}active{% endif %}" href="" id="{{ spk.id }}" speakerid="{{ spk.userid }}">{{ spk.name }} {% if spk.notseen>0 %}<span class="notseen">{{ spk.notseen }}</span>  {% endif %}<span class="archive">X</span></a>
+{% endfor %}

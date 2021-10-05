@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" href="/static/admin.css">
+<div class="adminview">
+<h1>User list</h1>
+</div>
+<div class="userslist adminview">
+{% for u in users %}
+    <div class="user">
+        <p>{{ u.name }}</p>
+        <p>
+            <form action="/admin/user/change-password" method="post" name="change-password">
+                {{ forms[u.name].hidden_tag() }}
+                {{ forms[u.name].username}}
+                {{ forms[u.name].password(size=80) }}
+                <p><input type="submit" value="change password"></p>
+            </form>
+            <form action="/admin/user/delete" method="post" name="delete-user">
+                {{ forms_delete[u.name].hidden_tag() }}
+                {{ forms_delete[u.name].username}}
+                <p><input type="submit" value="delete {{ u.name}}"></p>
+            </form>
+        </p>
+    </div>
+{% endfor %}
+</div>
+{% endblock %}
