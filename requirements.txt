@@ -16,3 +16,4 @@ sqlalchemy
 requests
 numpy
 colorama
+emoji

@@ -19,3 +19,8 @@ dbsettings={"host":"localhost",
             "dbname":"marion-turfu"
             }
 ```
+
+
+#Data preparation
+
+(OPTIONAL) tensorboard --logdir transfchatbot/logs

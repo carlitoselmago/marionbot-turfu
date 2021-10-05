@@ -17,50 +17,30 @@ from train import textPreprocess
 from train import transformer
 from train import CustomSchedule
 from train import accuracy, loss_function
-from config_prod import *
-
-"""
-try:
-
-except:
-    from app.botAIapi.marionbotapi.transfchatbot.train import textPreprocess
-    from app.botAIapi.marionbotapi.transfchatbot.train import transformer
-    from app.botAIapi.marionbotapi.transfchatbot.train import CustomSchedule
-    from app.botAIapi.marionbotapi.transfchatbot.train import accuracy, loss_function
-    from app.botAIapi.marionbotapi.transfchatbot.config_prod import *
-"""
+from config import *
 
 from colorama import init
 from colorama import Fore, Back
 init()
 
-
 strategy = tf.distribute.get_strategy()
-
-
 
 # For tf.data.Dataset
 BATCH_SIZE = int(64 * strategy.num_replicas_in_sync)
 
 
 try:
-    with open(str(pathlib.Path(__file__).parent.absolute())+'/saved/tokenizer_prod.pickle', 'rb') as handle:
+    with open(str(pathlib.Path(__file__).parent.absolute())+'/saved/tokenizer.pickle', 'rb') as handle:
         tokenizer = pickle.load(handle)
 except:
-    print("Error::::::: no tokenizer found, first run the training on train.py")
+    print("Error::::::: no tokenizer found, run the training on train.py")
     sys.exit()
-"""
-except:
-    with open('app/botAIapi/marionbotapi/transfchatbot/saved/tokenizer_prod.pickle', 'rb') as handle:
-        tokenizer = pickle.load(handle)
-"""
+
 # Define start and end token to indicate the start and end of a sentence
 START_TOKEN, END_TOKEN = [tokenizer.vocab_size], [tokenizer.vocab_size + 1]
 
 # Vocabulary size plus start and end token
 VOCAB_SIZE = tokenizer.vocab_size + 2
-
-
 
 
 def evaluate(sentence, model):
@@ -108,14 +88,25 @@ model = transformer(
 model.compile(optimizer=optimizer, loss=loss_function, metrics=[accuracy])
 
 try:
-    model.load_weights(str(pathlib.Path(__file__).parent.absolute())+'/saved/saved_weights_prod.h5')
+    model.load_weights(str(pathlib.Path(__file__).parent.absolute())+'/saved/saved_weights.h5')
 except:
-    print("Error::::::: no trained model found, first run the training on train.py")
+    print("Error::::::: no trained model found, run the training on train.py")
     sys.exit()
 
+"""
 if __name__ == '__main__':
     while True:
 
         prompt = input("you: ")
 
         print("bot:"+predict(prompt))
+"""
+#give two sentences as input
+if __name__ == '__main__':
+    lastPrompt=""
+    while True:
+
+        prompt = input("you: ")
+        predicted=predict(lastPrompt+". "+prompt)
+        print("bot:"+predicted)
+        lastPrompt=predicted

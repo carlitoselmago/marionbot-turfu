@@ -1,3 +1,4 @@
+transfchatbot/logs
 app/settings.py
 data/*
 transfchatbot/saved/*
