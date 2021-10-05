@@ -1,4 +1,4 @@
-based on  https://chatbotslife.com/replicate-your-friend-with-transformer-bc5efe3a1596
+based on  https://gitlab.com/Deutschman/chat-bot
 
 * To run your Chatbot, only those 3 lines have to be written in Command Prompt (in repository path).
 
