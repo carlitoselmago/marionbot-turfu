@@ -1,8 +1,11 @@
+# -*- coding: utf-8 -*-
 import os
 import json
 import sys
 from emoji import UNICODE_EMOJI
 import re
+from pyquery import PyQuery as pq
+import shutil
 
 class dataParser():
 
@@ -76,12 +79,53 @@ class dataParser():
                     #save
                     self.saveMessages(savefilename,cleaned)
 
+    def parse_instagram(self):
+
+        minimum_messages=10
+
+        def parseIGmsg(node):
+            print(node)
+
+        for root, dirs, files in os.walk("data/instagram"):
+            for file in files:
+                if file=='message_1.html':
+                    cleaned=[]
+                    fileuri=os.path.join(root, file)
+
+                    savefilename='instagram_'+fileuri.replace(".","_").replace("/","_").replace('\\',"_")
+                    if os.path.exists('data/ready/'+savefilename+'.txt'):
+                        print("skipping ",fileuri,":: already parsed")
+                        break
+
+                    print("parsing: ",fileuri,":::")
+                    print("")
+
+
+
+                    with open(fileuri, encoding='utf-8') as fh:
+                        html=pq(fh.read())
+
+                        dom=html.children("body")
+                        messages=html("._4bl9 ._li ._3a_u ._4t5n").find(".pam")
+                        for i in range(len(messages)):
+                            msg=messages.eq(i).find("._3-95 div div").eq(1).text()
+                            clean_text=self.cleanup_text(msg)
+                            if clean_text:
+                                cleaned.append(clean_text)
+
+                    if len(cleaned)>minimum_messages:
+                        print("Parsed ",len(cleaned),"messages")
+
+                        #save
+                        self.saveMessages(savefilename,cleaned)
+
 
     def saveMessages(self,filename,msgs):
         with open('data/ready/'+filename+'.txt', 'w',encoding="utf-8") as f:
             f.writelines( "%s\n" % item for item in msgs )
 
     def parse(self):
+        self.parse_instagram()
         self.parse_telegram()
         self.parse_whatsapp()
 
@@ -108,5 +152,14 @@ class dataParser():
         return bool(count)
 
 if __name__ == "__main__":
+    if len(sys.argv)>1:
+        if sys.argv[1]=="clean":
+            for root, dirs, files in os.walk('data/ready/'):
+                for f in files:
+                    os.unlink(os.path.join(root, f))
+                for d in dirs:
+                    shutil.rmtree(os.path.join(root, d))
+
+
     dp=dataParser()
     dp.parse()
