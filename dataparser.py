@@ -9,7 +9,8 @@ import shutil
 
 class dataParser():
 
-    maxprint=20
+    maxmessages=2000
+    minmesages=20
     minchars=1
     sources=["telegram","whatsapp"]
 
@@ -17,7 +18,7 @@ class dataParser():
         pass
 
     def parse_telegram(self):
-
+        total=0
         for root, dirs, files in os.walk("data/telegram"):
             for file in files:
                 if file.endswith('.json'):
@@ -35,19 +36,22 @@ class dataParser():
                     with open(fileuri, encoding='utf-8') as fh:
                         data = json.load(fh)
                         for i,chat in enumerate(data["chats"]["list"]):
-                            if i<self.maxprint:
+                            if i<self.maxmessages:
                                 for msg in chat["messages"]:
                                     if msg["type"]=="message" and msg["text"]!="":
                                         if not isinstance(msg["text"], list):
                                             clean_text=self.cleanup_text(msg["text"])
                                             if clean_text:
                                                 cleaned.append(clean_text)
-                    print("Parsed ",len(cleaned),"messages")
-
-                    #save
-                    self.saveMessages(savefilename,cleaned)
+                    if len(cleaned)>self.minmesages:
+                        print("Parsed ",len(cleaned),"messages")
+                        total+=len(cleaned)
+                        #save
+                        self.saveMessages(savefilename,cleaned)
+        return total
 
     def parse_whatsapp(self):
+        total=0
         for root, dirs, files in os.walk("data/whatsapp"):
             for file in files:
                 if file.endswith('.txt'):
@@ -74,14 +78,15 @@ class dataParser():
                                         for b in blacklist:
                                             if b not in clean_text:
                                                 cleaned.append(clean_text)
-                    print("Parsed ",len(cleaned),"messages")
-
-                    #save
-                    self.saveMessages(savefilename,cleaned)
+                    if len(cleaned)>self.minmesages:
+                        print("Parsed ",len(cleaned),"messages")
+                        total+=len(cleaned)
+                        #save
+                        self.saveMessages(savefilename,cleaned)
+        return total
 
     def parse_instagram(self):
-
-        minimum_messages=10
+        total=0
 
         def parseIGmsg(node):
             print(node)
@@ -113,11 +118,44 @@ class dataParser():
                             if clean_text:
                                 cleaned.append(clean_text)
 
-                    if len(cleaned)>minimum_messages:
+                    if len(cleaned)>self.minmesages:
                         print("Parsed ",len(cleaned),"messages")
-
+                        total+=len(cleaned)
                         #save
                         self.saveMessages(savefilename,cleaned)
+        return total
+
+    def parse_facebook(self):
+        total=0
+        for root, dirs, files in os.walk("data/facebook"):
+            for file in files:
+                if file.endswith('.json'):
+                    cleaned=[]
+                    fileuri=os.path.join(root, file)
+
+                    savefilename='facebook_'+fileuri.replace(".","_").replace("/","_").replace('\\',"_")
+                    if os.path.exists('data/ready/'+savefilename+'.txt'):
+                        print("skipping ",fileuri,":: already parsed")
+                        print("")
+                        break
+
+                    print("parsing: ",fileuri,":::")
+                    print("")
+                    with open(fileuri, encoding='utf-8') as fh:
+                        data = json.load(fh)
+                        for i,msg in enumerate(data["messages"]):
+                            if i<self.maxmessages:
+                                if msg["type"]=="Generic":
+                                    if "content" in msg:
+                                        clean_text=self.cleanup_text(msg["content"])
+                                        if clean_text:
+                                            cleaned.append(clean_text)
+                    if len(cleaned)>self.minmesages:
+                        print("Parsed ",len(cleaned),"messages")
+                        total+=len(cleaned)
+                        #save
+                        self.saveMessages(savefilename,cleaned)
+        return total
 
 
     def saveMessages(self,filename,msgs):
@@ -125,9 +163,15 @@ class dataParser():
             f.writelines( "%s\n" % item for item in msgs )
 
     def parse(self):
-        self.parse_instagram()
-        self.parse_telegram()
-        self.parse_whatsapp()
+        total=0
+        total+=self.parse_facebook()
+        total+=self.parse_instagram()
+        total+=self.parse_telegram()
+        total+=self.parse_whatsapp()
+
+        print("")
+        print("Total messages parsed ",total,"::::::::::::::")
+        print ("")
 
 
     def cleanup_text(self,s):
@@ -140,7 +184,9 @@ class dataParser():
                 cleaned=re.sub(r"http\S+", "", cleaned)
         else:
             cleaned=False
-
+        if cleaned:
+            if len(cleaned)<self.minchars:
+                cleaned= False
         return cleaned
 
     def is_emoji(self,s):

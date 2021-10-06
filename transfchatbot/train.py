@@ -12,6 +12,7 @@ import datetime
 import glob
 import sys
 from config import *
+import shutil
 
 
 #GPU
@@ -494,6 +495,13 @@ def main():
 
 
 if __name__ == '__main__':
+    if len(sys.argv)>1:
+        if sys.argv[1]=="clean":
+            for root, dirs, files in os.walk('saved/'):
+                for f in files:
+                    os.unlink(os.path.join(root, f))
+                for d in dirs:
+                    shutil.rmtree(os.path.join(root, d))
     try:
         from config import *
     except:
