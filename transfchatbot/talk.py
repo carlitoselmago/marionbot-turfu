@@ -18,6 +18,7 @@ from train import transformer
 from train import CustomSchedule
 from train import accuracy, loss_function
 from config import *
+import numpy as np
 
 from colorama import init
 from colorama import Fore, Back
@@ -43,7 +44,7 @@ START_TOKEN, END_TOKEN = [tokenizer.vocab_size], [tokenizer.vocab_size + 1]
 VOCAB_SIZE = tokenizer.vocab_size + 2
 
 
-def evaluate(sentence, model):
+def evaluate(sentence, model,temperature=0.7):
   sentence = textPreprocess(sentence)
   sentence = tf.expand_dims(
       START_TOKEN + tokenizer.encode(sentence) + END_TOKEN, axis=0)
@@ -53,7 +54,22 @@ def evaluate(sentence, model):
     predictions = model(inputs=[sentence, output], training=False)
     # select the last word from the seq_len dimension
     predictions = predictions[:, -1:, :]
-    predicted_id = tf.cast(tf.argmax(predictions, axis=-1), tf.int32)
+    #print(predictions)
+    #new part :::::::::::::::::::::
+    #preds = np.asarray(preds).astype('float64')
+    preds = np.log(predictions) / temperature
+    exp_preds = np.exp(predictions)
+    predictions = exp_preds / np.sum(exp_preds)
+    #print(predictions)
+    #print("predictions shape",predictions.shape)
+    #print("vamo a ver",predictions[0][0].shape)
+    probas = np.random.multinomial(1, predictions[0][0], 1)
+    #print("probas shape",probas.shape)
+    #return np.argmax(probas)
+    # end new part :::::::::::::::::::::
+
+    #predicted_id = tf.cast(tf.argmax(predictions, axis=-1), tf.int32) #original
+    predicted_id = tf.cast(tf.argmax([probas], axis=-1), tf.int32)
     # return the result if the predicted_id is equal to the end token
     if tf.equal(predicted_id, END_TOKEN[0]):
       break
@@ -65,8 +81,8 @@ def evaluate(sentence, model):
 
 
 
-def predict(sentence):
-  prediction = evaluate(sentence.lower(),model)
+def predict(sentence,temperature=0.7):
+  prediction = evaluate(sentence.lower(),model,temperature)
   predicted_sentence = tokenizer.decode(
       [i for i in prediction if i < tokenizer.vocab_size])
   return predicted_sentence.lstrip().capitalize()
