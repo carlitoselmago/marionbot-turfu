@@ -43,46 +43,77 @@ START_TOKEN, END_TOKEN = [tokenizer.vocab_size], [tokenizer.vocab_size + 1]
 # Vocabulary size plus start and end token
 VOCAB_SIZE = tokenizer.vocab_size + 2
 
+def sample(preds, temperature=1.0):
+
+    #np.set_printoptions(threshold=sys.maxsize)
+    #print("preds",preds)
+    #print("aaa:",tf.argmax(preds, axis=-1))
+    #print("bbb:", tf.cast(tf.argmax(preds, axis=-1), tf.int32))
+    preds = np.asarray(preds.numpy())[0][0]#np.asarray(preds[0][0]).astype('float64')
+    sliceN=preds.size*temperature
+    if sliceN<1.0:
+        sliceN=1
+    #print("sliceN",sliceN)
+    preds=preds[:int(sliceN)]
+    selected= np.random.choice(preds,1)
+    #print("selected!!!",selected)
+    return selected
+    """
+    preds=np.sort(preds)[::-1]
+    print("preds",preds)
+    preds = np.log(preds) / temperature
+    print("preds",preds)
+    exp_preds = np.exp(preds)
+    print("exp_preds",exp_preds)
+    preds = exp_preds / np.sum(exp_preds)
+    print("preds",preds)
+    probas = np.random.multinomial(1, preds, 1)
+    return np.argmax(probas)
+    """
 
 def evaluate(sentence, model,temperature=0.7):
-  sentence = textPreprocess(sentence)
-  sentence = tf.expand_dims(
-      START_TOKEN + tokenizer.encode(sentence) + END_TOKEN, axis=0)
-  output = tf.expand_dims(START_TOKEN, 0)
+    sentence = textPreprocess(sentence)
+    sentence = tf.expand_dims(START_TOKEN + tokenizer.encode(sentence) + END_TOKEN, axis=0)
+    output = tf.expand_dims(START_TOKEN, 0)
 
-  for i in range(MAX_LENGTH):
-    predictions = model(inputs=[sentence, output], training=False)
-    # select the last word from the seq_len dimension
-    predictions = predictions[:, -1:, :]
-    #print(predictions)
-    #new part :::::::::::::::::::::
-    #preds = np.asarray(preds).astype('float64')
-    preds = np.log(predictions) / temperature
-    exp_preds = np.exp(predictions)
-    predictions = exp_preds / np.sum(exp_preds)
-    #print(predictions)
-    #print("predictions shape",predictions.shape)
-    #print("vamo a ver",predictions[0][0].shape)
-    probas = np.random.multinomial(1, predictions[0][0], 1)
-    #print("probas shape",probas.shape)
-    #return np.argmax(probas)
-    # end new part :::::::::::::::::::::
+    for i in range(MAX_LENGTH):
+        predictions = model(inputs=[sentence, output], training=False)
+        # select the last word from the seq_len dimension
+        #predictions = predictions[:, -1:, :]
 
-    #predicted_id = tf.cast(tf.argmax(predictions, axis=-1), tf.int32) #original
-    predicted_id = tf.cast(tf.argmax([probas], axis=-1), tf.int32)
-    # return the result if the predicted_id is equal to the end token
-    if tf.equal(predicted_id, END_TOKEN[0]):
-      break
-    # concatenated the predicted_id to the output which is given to the decoder
-    # as its input.
-    output = tf.concat([output, predicted_id], axis=-1)
+        """
+        #semi working temperature function
+        sampled=sample(predictions[:, -1:, :],temperature)
+        sampled=np.where(predictions[:, -1:, :][0][0]==sampled[0])[0]
+        #print("sampled",sampled)
+        sampled=tf.convert_to_tensor(sampled.reshape(1,1,), dtype=tf.float32)
+        #print("sampled",sampled)
+        predicted_id = tf.cast(sampled, tf.int32)
+        #end semi working
+        """
 
-  return tf.squeeze(output, axis=0)
+        # original :::::::::::::::
+        predicted_id = tf.cast(tf.argmax(predictions[:, -1:, :], axis=-1), tf.int32) #original
+        # end original :::::::::::
+
+
+
+
+        # return the result if the predicted_id is equal to the end token
+        if tf.equal(predicted_id, END_TOKEN[0]):
+          break
+        # concatenated the predicted_id to the output which is given to the decoder
+        # as its input.
+        output = tf.concat([output, predicted_id], axis=-1)
+
+    return tf.squeeze(output, axis=0)
 
 
 
 def predict(sentence,temperature=0.7):
   prediction = evaluate(sentence.lower(),model,temperature)
+  #print("prediction",prediction)
+  #sys.exit()
   predicted_sentence = tokenizer.decode(
       [i for i in prediction if i < tokenizer.vocab_size])
   return predicted_sentence.lstrip().capitalize()
@@ -109,13 +140,14 @@ except:
     print("Error::::::: no trained model found, run the training on train.py")
     sys.exit()
 
-"""
+
 if __name__ == '__main__':
     while True:
 
         prompt = input("you: ")
 
-        print("bot:"+predict(prompt))
+        print("bot:"+predict(prompt,.1))
+
 """
 #give two sentences as input
 if __name__ == '__main__':
@@ -126,3 +158,4 @@ if __name__ == '__main__':
         predicted=predict(lastPrompt+". "+prompt)
         print("bot:"+predicted)
         lastPrompt=predicted
+"""

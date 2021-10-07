@@ -6,6 +6,7 @@ from emoji import UNICODE_EMOJI
 import re
 from pyquery import PyQuery as pq
 import shutil
+import emoji
 
 class dataParser():
 
@@ -105,8 +106,6 @@ class dataParser():
                     print("parsing: ",fileuri,":::")
                     print("")
 
-
-
                     with open(fileuri, encoding='utf-8') as fh:
                         html=pq(fh.read())
 
@@ -176,26 +175,27 @@ class dataParser():
 
     def cleanup_text(self,s):
         cleaned=str(s)
-        if len(s)>self.minchars:
-            if (self.is_emoji(s)):
-                cleaned= False
-            else:
-                #remove urls
-                cleaned=re.sub(r"http\S+", "", cleaned)
-        else:
-            cleaned=False
-        if cleaned:
-            if len(cleaned)<self.minchars:
-                cleaned= False
+
+        #remove unwanted characters
+        removeList=['"','#', '$', '%', '(', ')', '=', ';' ,':',  '*', '+', '£' , '—','’','@']
+        for r in removeList:
+          if r in cleaned:
+            cleaned=cleaned.replace(r, '')
+
+        #remove emojis
+        cleaned=self.strip_emoji(cleaned)
+
+        #remove urls
+        cleaned=re.sub(r"http\S+", "", cleaned)
+
+        if len(cleaned)<self.minchars:
+            cleaned= False
+
         return cleaned
 
-    def is_emoji(self,s):
-        count = 0
-        for emoji in UNICODE_EMOJI:
-            count += s.count(emoji)
-            if count > 1:
-                return False
-        return bool(count)
+    def strip_emoji(self,text):
+        new_text = re.sub(emoji.get_emoji_regexp(), r"", text)
+        return new_text
 
 if __name__ == "__main__":
     if len(sys.argv)>1:
