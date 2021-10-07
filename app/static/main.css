@@ -365,9 +365,9 @@ body.b_safari #messages {
 /* gradients */
 body {
   /* background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab); */
-  background: linear-gradient(-45deg, #FDFBFB, #C1E1E8, #E8D5E2, #FDFBFB, #C1E1E8, #E8D5E2, #FDFBFB, #C1E1E8, #E8D5E2);
-  background-size: 400% 400%;
-  animation: gradient 60s ease infinite;
+  background: linear-gradient(-45deg,  #FFDADA, #B8FDFF);
+  background-size: 100% 100%;
+  animation: gradient 10s ease infinite;
 }
 
 #tipping {
