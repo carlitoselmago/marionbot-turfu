@@ -25,7 +25,6 @@ bot=True
 app = Flask(__name__)
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
-#CORS.cross_origin(["https://www.esam-c2.fr/", "https://marionbot.ddns.net/"])
 #app.secret_key ='kskskskdkdkddi__DDD'
 app.config['DROPZONE_UPLOAD_MULTIPLE'] = False
 app.config['DROPZONE_ALLOWED_FILE_CUSTOM'] = True
@@ -50,7 +49,7 @@ dropzone = Dropzone(app)
 
 login = LoginManager(app)
 cors = CORS(app,resources={r"/*":{"origins":"*"}})
-socketio = SocketIO(app,cors_allowed_origins=["https://www.esam-c2.fr","http://htmlfiesta.com","https://marionbot.ddns.net"])
+socketio = SocketIO(app,cors_allowed_origins=["https://www.esam-c2.fr","http://htmlfiesta.com","https://marionbot.ddns.net","https://turfu-festival.ddns.net/"])
 
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
 
