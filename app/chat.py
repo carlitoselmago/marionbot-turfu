@@ -49,7 +49,7 @@ dropzone = Dropzone(app)
 
 login = LoginManager(app)
 cors = CORS(app,resources={r"/*":{"origins":"*"}})
-socketio = SocketIO(app,cors_allowed_origins=["https://www.esam-c2.fr","http://htmlfiesta.com","https://marionbot.ddns.net","https://turfu-festival.ddns.net/"])
+socketio = SocketIO(app,cors_allowed_origins=["https://turfu-festival.ddns.net/","https://www.esam-c2.fr","http://htmlfiesta.com","https://marionbot.ddns.net"])
 
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
 
