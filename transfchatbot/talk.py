@@ -29,7 +29,8 @@ strategy = tf.distribute.get_strategy()
 # For tf.data.Dataset
 BATCH_SIZE = int(64 * strategy.num_replicas_in_sync)
 
-
+with open(str(pathlib.Path(__file__).parent.absolute())+'/saved/tokenizer.pickle', 'rb') as handle:
+    tokenizer = pickle.load(handle)
 try:
     with open(str(pathlib.Path(__file__).parent.absolute())+'/saved/tokenizer.pickle', 'rb') as handle:
         tokenizer = pickle.load(handle)
