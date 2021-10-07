@@ -10,7 +10,7 @@ import emoji
 
 class dataParser():
 
-    maxmessages=2000
+    maxmessages=100#2000
     minmesages=20
     minchars=1
     sources=["telegram","whatsapp"]
@@ -148,7 +148,7 @@ class dataParser():
                                     if "content" in msg:
                                         clean_text=self.cleanup_text(msg["content"])
                                         if clean_text:
-                                            cleaned.append(clean_text)
+                                            cleaned.insert(0,clean_text)
                     if len(cleaned)>self.minmesages:
                         print("Parsed ",len(cleaned),"messages")
                         total+=len(cleaned)
@@ -174,7 +174,7 @@ class dataParser():
 
 
     def cleanup_text(self,s):
-        cleaned=str(s)
+        cleaned=str(s).strip()
 
         #remove unwanted characters
         removeList=['"','#', '$', '%', '(', ')', '=', ';' ,':',  '*', '+', '£' , '—','’','@']
