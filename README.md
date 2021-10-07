@@ -20,6 +20,10 @@ dbsettings={"host":"localhost",
             }
 ```
 
+#web server
+
+If you plan to deploy the webserver to a domain name, add your domain (and use SSL) to app/chat.py : line 52
+
 
 #Data preparation
 

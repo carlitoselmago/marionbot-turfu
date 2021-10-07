@@ -29,8 +29,7 @@ strategy = tf.distribute.get_strategy()
 # For tf.data.Dataset
 BATCH_SIZE = int(64 * strategy.num_replicas_in_sync)
 
-with open(str(pathlib.Path(__file__).parent.absolute())+'/saved/tokenizer.pickle', 'rb') as handle:
-    tokenizer = pickle.load(handle)
+
 try:
     with open(str(pathlib.Path(__file__).parent.absolute())+'/saved/tokenizer.pickle', 'rb') as handle:
         tokenizer = pickle.load(handle)
@@ -134,11 +133,11 @@ model = transformer(
       dropout=DROPOUT)
 
 model.compile(optimizer=optimizer, loss=loss_function, metrics=[accuracy])
-model.load_weights(str(pathlib.Path(__file__).parent.absolute())+'/saved/saved_weights.h5')
+
 try:
     model.load_weights(str(pathlib.Path(__file__).parent.absolute())+'/saved/saved_weights.h5')
 except:
-    print("Error::::::: no trained model found, run the training on train.py")
+    print("Error::::::: no trained model found or mismatch on config.py with the trained model, run the training on train.py")
     sys.exit()
 
 
