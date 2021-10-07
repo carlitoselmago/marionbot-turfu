@@ -443,6 +443,7 @@ def main():
     for f in files:
         linesALL.extend(open(f,encoding='utf-8').read().split('\n')[:-1])
 
+    linesALL=linesALL[:2000] #limit data
     print("Training with ",len(linesALL),"messages",":::::::")
 
     questions=[]

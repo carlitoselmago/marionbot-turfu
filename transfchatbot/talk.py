@@ -133,7 +133,7 @@ model = transformer(
       dropout=DROPOUT)
 
 model.compile(optimizer=optimizer, loss=loss_function, metrics=[accuracy])
-
+model.load_weights(str(pathlib.Path(__file__).parent.absolute())+'/saved/saved_weights.h5')
 try:
     model.load_weights(str(pathlib.Path(__file__).parent.absolute())+'/saved/saved_weights.h5')
 except:

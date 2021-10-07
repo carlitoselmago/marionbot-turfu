@@ -30,7 +30,7 @@ DROPOUT = 0.1
 
 EPOCHS = 300
 """
-"""
+
 #basic
 # Maximum sentence length
 MAX_LENGTH = 30#30
@@ -44,7 +44,7 @@ NUM_HEADS = 8
 UNITS = 1048#512#2048 #512
 DROPOUT = 0.1
 
-EPOCHS = 150
+EPOCHS = 50
 """
 MAX_LENGTH = 30#30
 
@@ -58,3 +58,4 @@ UNITS = 512#2048 #512
 DROPOUT = 0.1
 
 EPOCHS = 150
+"""
