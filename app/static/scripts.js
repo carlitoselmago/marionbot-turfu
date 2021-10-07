@@ -21,7 +21,7 @@ $(document).ready(function() {
 
   if (($(".login").length) && (ififramedlimited())){
     console.log("IFRAMED LIMITED",ififramedlimited());
-    $(".secondaryinfo").html('<a href="https://marionbot.ddns.net/" target="_blank" class="btn iframedstart">Converser avec <span class="mname">Marion</span></a>');
+    $(".secondaryinfo").html('<a href="https://turfu-festival.ddns.net/" target="_blank" class="btn iframedstart">Converser avec <span class="mname">Marion</span></a>');
   }
 
 
@@ -218,24 +218,6 @@ function handleMessagesAPI(data, scrolldownatend = false, allmessages = true) {
       }
     });
 
-    /*
-
-    $(".contmsg", dom).each(function(index) {
-      var newMid = $(this).attr("id");
-      console.log("newMid ",newMid );
-      //if(!document.getElementById(newMid)){
-      var messageHtml=$(this).parent().html();
-      //console.log($(messageHtml).attr("class"));
-      if ($("#messages .contmsg#" + newMid).length == 0) {
-        //if (!$(messageHtml).hasClass("me")){
-        console.log($(this).parent().html());
-            $("#messages").append($(this).parent().html());
-        //}
-
-      }
-    });
-
-    */
   } else {
     console.log("All messages");
     document.getElementById('messages').innerHTML = data;

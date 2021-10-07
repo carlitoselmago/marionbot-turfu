@@ -9,20 +9,18 @@ $(document).ready(function() {
   });
 
   $("#speakers").on("click", ".archive", function(e) {
-    //  e.preventDefault();
+
     e.stopPropagation();
     e.preventDefault();
     var userid = $(this).parent().attr("id");
     $(this).closest(".speaker").slideUp();
-    //  $(this).closest(".speaker").hide();
+
     $("#messages").html("");
     $.ajax({
       type: "GET",
       dataType: 'html',
       url: "/archiveuser?id=" + userid,
       success: function(data) {
-        //$("#speakers").html("");
-        //updateSpeakers(window.talker);
       }
     });
   });
@@ -45,18 +43,12 @@ $(document).ready(function() {
 
 function postLoadSpeakers() {
   var newDOM = $("#preload").children();
-  //console.log($("#speakers").children().html().length);
-  //console.log($("#preload").children().html().length);
+
 
   if ($("#speakers").children().html() === $("#preload").children().html()) {
-    //if ($("#speakers").children()[0] === $("#preload").children()[0]) {
-    //console.log("son iguales");
-
   } else {
-    //if ($("#speakers").children().html().length!== $("#preload").children().html().length) {
     console.log("son speakers diferentes");
     if (newDOM.html().includes('class="notseen"')) {
-      //window.audioElement.play();
     }
     $("#speakers").html($("#preload").html());
   }
@@ -64,9 +56,7 @@ function postLoadSpeakers() {
   $("#speakers .notseen").each(function() {
     newM += parseInt($(this).text());
   });
-
   notifySpecific(newM);
-
 }
 
 function updateSpeakers(speaker = false) {
@@ -90,7 +80,6 @@ function setSpeakerTo(chatID, speakerID) {
   $("#to").attr("value", speakerID);
 
   window.talker = chatID;
-  //setSpeakerTo(chatID);
 
   $("#messagebox").val("");
 
@@ -107,7 +96,6 @@ function setSpeakerTo(chatID, speakerID) {
     success: function(data) {
       console.log("speaker switch ok!");
 
-      //updateMessages(true, true);
 
       socket.emit('browser_ready', {
         data: {
@@ -118,7 +106,6 @@ function setSpeakerTo(chatID, speakerID) {
 
       $(".speaker#" + chatID + " .notseen").hide();
       $("body").removeClass("menuopen");
-      //$("#messages").html(data);
 
     },
 
