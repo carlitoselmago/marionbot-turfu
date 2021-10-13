@@ -108,16 +108,18 @@ def evaluate(sentence, model,temperature=0.7):
 
     return tf.squeeze(output, axis=0)
 
-
+previous=""
 
 def predict(sentence,temperature=0.7):
-  prediction = evaluate(sentence.lower(),model,temperature)
-  #print("prediction",prediction)
-  #sys.exit()
-  predicted_sentence = tokenizer.decode(
+    global previous
+    prediction = evaluate(previous.lower()+sentence.lower(),model,temperature)
+    #print("prediction",prediction)
+    #sys.exit()
+    predicted_sentence = tokenizer.decode(
       [i for i in prediction if i < tokenizer.vocab_size])
-  return predicted_sentence.lstrip().capitalize()
-
+    toreturn=predicted_sentence.lstrip().capitalize()
+    previous+=toreturn+'\n'
+    return toreturn
 
 learning_rate = CustomSchedule(D_MODEL)
 
