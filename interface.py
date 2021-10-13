@@ -8,7 +8,7 @@ except:
 import time
 """
 from transfchatbot.talk import *
-
+previous=""
 def answer(input,oldmessages):
     return predict(input)
 
