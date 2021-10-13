@@ -112,7 +112,8 @@ previous=""
 
 def predict(sentence,temperature=0.7):
     global previous
-    prediction = evaluate(previous.lower()+sentence.lower(),model,temperature)
+    #prediction = evaluate(previous.lower()+sentence.lower(),model,temperature)
+    prediction = evaluate(sentence.lower(),model,temperature)
     #print("prediction",prediction)
     #sys.exit()
     predicted_sentence = tokenizer.decode(
