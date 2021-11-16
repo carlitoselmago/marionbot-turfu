@@ -10,7 +10,8 @@ import time
 from transfchatbot.talk import *
 previous=""
 def answer(input,oldmessages):
-    return predict(input)
+    #print("oldmessages",oldmessages)
+    return predict(input,oldmessages)
 
 """
 import os

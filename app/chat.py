@@ -11,6 +11,7 @@ import locale
 import os
 import datetime
 import time
+
 import hashlib
 from app.db import db
 import sys
@@ -326,8 +327,8 @@ def handle_post(data):
     else:
         DB.saveMessage(session["user"]["id"],session["chatid"], message)
 
-    msgs = DB.getMessages(session["chatid"],last)
-
+    #msgs = DB.getMessages(session["chatid"],last)
+    msgs = DB.getMessages(session["chatid"])
 
     if bot:
         #https://stackoverflow.com/questions/34581255/python-flask-socketio-send-message-from-thread-not-always-working

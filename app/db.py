@@ -95,7 +95,7 @@ class db():
         return False
 
 
-    def getMessages(self,chatid,lastMsgDate):
+    def getMessages(self,chatid,lastMsgDate=False):
         if lastMsgDate:
             if lastMsgDate=="undefined":
                 lastMsgDate=False

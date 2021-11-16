@@ -110,16 +110,22 @@ def evaluate(sentence, model,temperature=0.7):
 
 previous=""
 
-def predict(sentence,temperature=0.7):
-    global previous
-    #prediction = evaluate(previous.lower()+sentence.lower(),model,temperature)
-    prediction = evaluate(sentence.lower(),model,temperature)
+def predict(sentence,oldmessages,temperature=0.7):
+    #global previous
+    try:
+        previous=oldmessages[-3]["text"]+'\n'
+    except:
+        previous=""
+    print("previous",previous)
+    prediction = evaluate(previous.lower()+sentence.lower(),model,temperature)
+    #prediction = evaluate(sentence.lower(),model,temperature)
     #print("prediction",prediction)
     #sys.exit()
     predicted_sentence = tokenizer.decode(
       [i for i in prediction if i < tokenizer.vocab_size])
     toreturn=predicted_sentence.lstrip().capitalize()
-    previous+=toreturn+'\n'
+    #previous=toreturn+'\n'
+    previous=sentence+'\n'
     return toreturn
 
 learning_rate = CustomSchedule(D_MODEL)
